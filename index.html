@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      
+      <!--Notes:
+
+        material="side: double"
+
+        -->
+      
+    <meta charset="utf-8">
+    <title>Hello, World! - A-Frame</title>
+    <meta name="description" content="Hello, World! - A-Frame">
+      
+   <!-- Ctl + Alt + i = inspector-->  
+   <!-- <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>-->
+       <!-- aframe (Note: had to roll back to version 1.1 to get physics to work!) -->
+   <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
+   <!-- event set component for rollovers etc. -->
+   <script src="https://unpkg.com/aframe-event-set-component@5.0.0/dist/aframe-event-set-component.min.js"></script>
+      
+
+       <script>
+        //initialization function called on <body> load
+        function init() {
+            let scene = document.getElementById("scene");
+            console.log("scene = " + scene);
+
+            //hide raycaster initially
+            document.getElementById("controller").setAttribute("raycaster", "showLine: false;");
+
+            //hide cursor and show controller if entering VR mode
+            scene.addEventListener('enter-vr', function () {
+                console.log("Entering VR Mode!");
+                document.getElementById("cursor").setAttribute("visible", "false");
+                document.getElementById("controller").setAttribute("raycaster", "showLine: true; far: 40;");
+            });
+
+            //make cursor visible and hide controller in desktop/laptop mode
+            scene.addEventListener('exit-vr', function () {
+                console.log("Exiting VR Mode!");
+                document.getElementById("cursor").setAttribute("visible", "true");
+                document.getElementById("controller").setAttribute("raycaster", "showLine: false;");
+            });
+        }
+
+      //custom teleporter component
+AFRAME.registerComponent("teleport", {
+            schema: {
+                type: 'string'
+            },
+            init: function () {
+                //variables
+                let el = this.el;
+                let cameraRig = document.getElementById("rig");
+                let newPosition = this.data;
+
+                //event handlers
+                el.addEventListener("click", teleport);
+
+                function teleport() {
+                    console.log("Teleporting...");
+                    cameraRig.setAttribute("position", newPosition);
+                }
+            }
+        });
+        //fun random range number generator 
+        function randRange(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+    </script>
+      
+      
+  </head>
+<body onload="init()">
+    <a-scene id="scene">
+        
+        
+        
+        <!--Import Map
+          <a-asset-item id="station" src="models/station.glb"></a-asset-item>-->
+        
+        <!-- Asset management system. -->
+        <a-assets>
+            
+            <a-asset-item id="arch" src="assets/arch.glb"></a-asset-item>
+            <a-asset-item id="room" src="assets/room.glb"></a-asset-item> 
+            
+            <a-asset-item id="street" src="assets/street.glb"></a-asset-item>
+            <a-asset-item id="apartment" src="assets/apartment.glb"></a-asset-item>
+            <a-asset-item id="stone" src="assets/stone.glb"></a-asset-item> 
+        
+        </a-assets>
+        
+        <a-box color="tomato"  position="-4.223 1.11163 -0.89657" depth="2" height="2" width="2" event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+            event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;"></a-box>
+     
+        
+        
+        <!--Lights-->
+        
+        <!--Main-->
+        <!--<a-entity light="" position=" 0 2.941 -2.731"></a-entity>-->
+        
+        <!--Street-->
+        
+        <!--Toys-->
+       <!--<a-entity light="intensity: 0.36; angle: 43.82; type: point; castShadow: true" position="7.972 4.80167 -108.00364" rotation="-80.81 -0.22 -0.28"></a-entity>-->
+        
+        
+            <!-- CAMERA -->
+        <!-- Trick: use a "rig" to position and move camera (and controllers with it). -->
+        <a-entity wasd-controls="enabled: false" id="rig" position="0 0 0">
+            <!-- Note: wasd-controls are disabled to avoid rig offset glitch with teleporting. -->
+            <a-camera wasd-controls="enabled: false">
+                <a-cursor id="cursor" color="#e9f0b2" opacity=".5"></a-cursor>
+                <!-- Or <a-entity cursor></a-entity> -->
+            </a-camera>
+            <!-- Add a VR controllwer with the laser-controls component -->
+            <a-entity id="controller" laser-controls="hand: right" raycaster="showLine: true; far: 40;"></a-entity>
+        </a-entity>
+          
+             <!-- Place Map -->
+        
+        <a-entity  rotation="0 0 0" scale="3 3 3" position="0 0 -5" gltf-model="#room"></a-entity>
+        <!--Stone Age -->
+        
+        <a-entity  rotation="0 0 0" scale=".5 .5 .5" position="-155.158 0 -108.444" gltf-model="#stone"></a-entity>
+        <!--18-19th Street -->
+        
+        <a-entity  rotation="0 0 0" scale="1 1 1" position="-13.114 0 -108.444" gltf-model="#street"></a-entity>
+        <!--80s 90s Apartment -->
+        
+        <a-entity  rotation="0 0 0" scale=".03 .03 .03" position="123.114 0 -108.444" gltf-model="#apartment"></a-entity>
+ 
+         <!-- Arch left -->
+        <a-text size="3"  position="-5 5 -7.5" value="Stone Age"></a-text>
+        <a-entity  teleport="-202.249  .1 -85.288" rotation="0 90 0" scale=" 1 1 1" position="-5 0 -9" gltf-model="#arch" event-set__mouseenter="_event: mouseenter; scale: 1.1 1.1 1.2;" event-set__mouseeleave="_event: mouseleave;  scale: 1 1 1;"></a-entity>
+          <!-- Arch mid -->
+        <a-text size="3"  position="-.8 5 -7.5" value="18-19th Street"></a-text>
+        <a-entity   teleport="-9.415 .1 -108.370" rotation="0 90 0" scale=" 1 1 1" position="0 0 -9" gltf-model="#arch" event-set__mouseenter="_event: mouseenter; scale: 1.1 1.1 1.2;" event-set__mouseeleave="_event: mouseleave;  scale: 1 1 1;"></a-entity>
+         <!-- Arch right -->
+        <a-text size="3"  position="3.4 5 -7.5" value="80-90s Apartment"></a-text>
+        <a-entity  teleport="118.414 .1 -105.557" rotation="0 90 0" scale=" 1 1 1" position="5 0 -9" gltf-model="#arch" event-set__mouseenter="_event: mouseenter; scale: 1.1 1.1 1.2;" event-set__mouseeleave="_event: mouseleave;  scale: 1 1 1;"></a-entity>
+        
+        
+        <!-- teleporter  -->
+     <a-circle position="0 .1 -3.22" rotation="-90 0 0" teleport="0 .1 -3.22" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle>  
+        
+            <!--Stone Age-->
+        
+         <!-- Entrance/ Exit  -->
+     <a-circle position="-202.249 .1 -85.288" rotation="-90 0 0" teleport="0 .1 -3.22" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+           <!-- cave  -->
+     <a-circle position="-190.770 .1 -85.663" rotation="-90 0 0" teleport="-190.770 .1 -85.663" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+         <!-- cave 2 -->
+     <a-circle position="-181.943 .1 -80.256" rotation="-90 0 0" teleport="-181.943 .1 -80.256" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+           <!-- fire pit  -->
+     <a-circle position="-179.633 .1 -96.951" rotation="-90 0 0" teleport="-179.633 .1 -96.951" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+         <!-- cut trees  -->
+     <a-circle position="-184.504 .1 -115.103" rotation="-90 0 0" teleport="-184.504 .1 -115.103" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+         
+         <!-- tepee  -->
+     <a-circle position="-161.920 .1 -114.891" rotation="-90 0 0" teleport="-161.920 .1 -114.891" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+          <!-- house  -->
+     <a-circle position="-170.916 .1 -131.673" rotation="-90 0 0" teleport="-170.916 .1 -131.673" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+        
+        
+        <!--18-19th Street-->
+        
+        <!-- entrance/exit  -->
+     <a-circle position="-9.556 .3 -108.480" rotation="-90 0 0" teleport="0 .1 -3.22" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+         <!-- entrance toys street teleporter  -->
+     <a-circle position="-0.841 .1 -108.918" rotation="-90 0 0" teleport="-0.841 .1 -108.918" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+           <!-- toys teleporter  -->
+     <a-circle position="9.514 .5 -108.918" rotation="-90 0 0" teleport="9.514 .5 -108.918" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+            <!-- toys teleporter 2  -->
+     <a-circle position="9.391 .5 -122.766" rotation="-90 0 0" teleport="9.391 .5 -122.766" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+               
+        
+             <!-- toys teleporter 4  -->
+     <a-circle position="21.708 .5 -108.379" rotation="-90 0 0" teleport="21.708 .5 -108.379" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+        
+         <!-- toys park street teleporter  -->
+     <a-circle position="9.514 .1 -100.338" rotation="-90 0 0" teleport="9.514 .1 -100.338" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+              <!-- park teleporter  -->
+     <a-circle position="9.514 .3 -90.690" rotation="-90 0 0" teleport="9.514 .3 -90.690" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+                  <!-- park teleporter 2  -->
+     <a-circle position="19.907 .3 -79.002" rotation="-90 0 0" teleport="19.907 .3 -79.002" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+      <!-- 80s 90s Apartment -->
+        
+             <!-- exit -->
+     <a-circle position="118.760 .1 -105.369" rotation="-90 0 0" teleport="0 .1 -3.22"  radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+             <!-- living room  -->
+     <a-circle position="118.760 .1 -108.288" rotation="-90 0 0" teleport="118.760 .1 -108.288" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+                     <!-- dining room  -->
+     <a-circle position="122.547 .1 -108.288" rotation="-90 0 0" teleport="122.547 .1 -108.288" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle>
+                        <!-- balcony  -->
+     <a-circle position="118.412 .1 -112.772" rotation="-90 0 0" teleport="118.412 .1 -112.772" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+            <!-- kitchen  -->
+     <a-circle position="122.547 .1 -105.694" rotation="-90 0 0" teleport="122.547 .1 -105.694" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+                    <!-- hall 1  -->
+     <a-circle position="126.267 .1 -108.646" rotation="-90 0 0" teleport="126.267 .1 -108.646" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+             <!-- hall 2  -->
+     <a-circle position="128.647 .1 -108.646" rotation="-90 0 0" teleport="128.647 .1 -108.646" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+                     <!-- bathroom  -->
+     <a-circle position="128.105 .1 -106.221" rotation="-90 0 0" teleport="128.105 .1 -106.221" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+                      <!-- bedroom  -->
+     <a-circle position="128.551 .1 -111.305" rotation="-90 0 0" teleport="128.551 .1 -111.305" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+        
+        <!--Ground-->
+        <a-sphere scale="60 60 60" position="0 0 0" ></a-sphere>
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="20" height="20" color="#7BC8A4"></a-plane>
+        
+      <!-- <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9" event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+            event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">></a-box>
+     
+      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>-->
+        
+      <a-sky color="#ECECEC"></a-sky>
+    </a-scene>
+  </body>
+</html>
