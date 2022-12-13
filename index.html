@@ -10,12 +10,13 @@
       
     <meta charset="utf-8">
     <title>Hello, World! - A-Frame</title>
-    <meta name="description" content="Hello, World! - A-Frame">
+    <meta name="apple-mobile-web-app-capable" content="Hello, World! - A-Frame">
       
    <!-- Ctl + Alt + i = inspector-->  
    <!-- <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>-->
        <!-- aframe (Note: had to roll back to version 1.1 to get physics to work!) -->
-   <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
+       <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+
    <!-- event set component for rollovers etc. -->
    <script src="https://unpkg.com/aframe-event-set-component@5.0.0/dist/aframe-event-set-component.min.js"></script>
       
@@ -84,11 +85,15 @@ AFRAME.registerComponent("teleport", {
         <a-assets>
             
             <a-asset-item id="arch" src="assets/arch.glb"></a-asset-item>
-            <a-asset-item id="room" src="assets/room.glb"></a-asset-item> 
+            <a-asset-item id="room" src="assets/room.glb"></a-asset-item>
             
             <a-asset-item id="street" src="assets/street.glb"></a-asset-item>
             <a-asset-item id="apartment" src="assets/apartment.glb"></a-asset-item>
             <a-asset-item id="stone" src="assets/stone.glb"></a-asset-item> 
+            
+              <a-assets>
+    <!--<video id="90s_tv" autoplay loop="true" src="/assets/90s_tv.mp4" webkit-playsinline rolloffFactor="-100"></video>-->
+  </a-assets>
         
         </a-assets>
         
@@ -116,32 +121,94 @@ AFRAME.registerComponent("teleport", {
                 <a-cursor id="cursor" color="#e9f0b2" opacity=".5"></a-cursor>
                 <!-- Or <a-entity cursor></a-entity> -->
             </a-camera>
-            <!-- Add a VR controllwer with the laser-controls component -->
+            <!-- Add a VR controller with the laser-controls component -->
             <a-entity id="controller" laser-controls="hand: right" raycaster="showLine: true; far: 40;"></a-entity>
         </a-entity>
           
-             <!-- Place Map -->
-        
+        <!-- !!!!Place Map!!!! -->
         <a-entity  rotation="0 0 0" scale="3 3 3" position="0 0 -5" gltf-model="#room"></a-entity>
         <!--Stone Age -->
-        
         <a-entity  rotation="0 0 0" scale=".5 .5 .5" position="-155.158 0 -108.444" gltf-model="#stone"></a-entity>
         <!--18-19th Street -->
-        
         <a-entity  rotation="0 0 0" scale="1 1 1" position="-13.114 0 -108.444" gltf-model="#street"></a-entity>
         <!--80s 90s Apartment -->
-        
         <a-entity  rotation="0 0 0" scale=".03 .03 .03" position="123.114 0 -108.444" gltf-model="#apartment"></a-entity>
+        <!--!!!!Mouseover Prompts!!!!-->
+        <a-box position="-4.395 1.833 -90.845" depth="5.030" width="3.540" height="3.050" material=" color: #EF2D5E; transparent: true; opacity: .01"   event-set__enter="_event: mouseenter;  color: #ffffff; transparent: true; opacity: 1" event-set__leave="_event: mouseleave; color: #FFC65D; transparent: false; opacity: 0 "></a-box>
+        
+        
+        <a-entity id="box" position="-2 1 0"  geometry="primitive: box"  shadow event-set__enter="_event: mouseenter; color: #026fc9"
+             event-set__leave="_event: mouseleave; color: #4CC3D9"></a-entity>
+        
+         <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"  event-set__enter="_event: mouseenter; color: #026fc9" event-set__leave="_event: mouseleave; color: #FFC65D"></a-cylinder>
+        <!--Invis Mouse Over-->
+        <a-box position="3 0.75 -3" depth="0.5" width="5" height="4" material=" color: #EF2D5E; transparent: true; opacity: .01"   event-set__enter="_event: mouseenter;  color: #EF2D5E; transparent: true; opacity: 1" event-set__leave="_event: mouseleave; color: #FFC65D; transparent: false; opacity: 0 "></a-box>
+      
+        
+        <a-circle position="1 1 1" material="side: double; color: #EF2D5E; transparent: true; opacity: 1" geometry="primitive:circle;radius:0.5" radius="0.5"></a-circle>
+          
+        
+      
+
+        
+        
+        
+        <!--!!!!Light!!!!-->
+        <!--Main room-->
+         <a-entity light="decay: 0.87; distance: 15.85; intensity: 1.95; type: point; color: #f7ebca" position="0 3 0"></a-entity>
+        <!--<<<Street>>>-->
+        <!--Street lights r-->
+        <a-entity light="decay: 0.87; distance: 15.85; intensity: 1.95; type: point; color: #f7ebca" position="-6.39396 3.99864 -82.29234"></a-entity>
+        <!--Street lights 1-->
+        <a-entity light="decay: 0.87; distance: 15.85; intensity: 1.95; type: point; color: #f7ebca" position="-6.39396 3.99864 -100.43432"></a-entity>
+        <!--Street lights l-->
+        <a-entity light="decay: 0.87; distance: 15.85; intensity: 1.95; type: point; color: #f7ebca" position="-6.39396 3.99864 -119.87633"></a-entity>
+        <!--Street lights 2-->
+        <a-entity light="decay: 0.87; distance: 15.85; intensity: 1.95; type: point; color: #f7ebca" position="8.03861 3.99864 -108.97024"></a-entity>
+        <!--Street lights 3-->
+        <a-entity light="decay: 0.87; distance: 15.85; intensity: 1.95; type: point; color: #f7ebca" position="8.03861 3.99864 -92.95632"></a-entity>
+        <!--Park-->
+        <a-entity light="decay: 0.87; distance: 15.85; intensity: 1.95; type: point; color: #f7ebca" position="18.63548 3.99864 -84.04107"></a-entity>
+        <!--Toys1-->
+        <a-entity light="decay: 0.87; distance: 15.85; intensity: 1.95; type: point; color: #f7ebca" position="14.12791 3.99864 -121.79578"></a-entity>
+        <!--Toys2-->
+        <a-entity light="decay: 0.87; distance: 15.85; intensity: 1.95; type: point; color: #f7ebca" position="18.18829 3.99864 -118.09108"></a-entity>
+        <!--Toys3-->
+        <a-entity light="decay: 0.87; distance: 15.85; intensity: 1.95; type: point; color: #f7ebca" position="25.0677 3.99864 -115.50503"></a-entity>
+        <!--<<<Apartment>>>-->
+        <!--TV-->
+        <!--https://www.youtube.com/watch?v=ri4V5ATyq6w-->
+        <a-video src="#90s_tv" width="5" height="5" rotation="0 90 0" position="-5 1 -4" ></a-video>
+        
+        <!--Entrance-->
+        <a-entity light="decay: 0.87; distance: 5.85; intensity: 1.95; type: point; color: #f7ebca" position="119.28235 2.67171 -106.74194"></a-entity>
+        <!--Dining-->
+        <a-entity light="decay: 0.87; distance: 5.85; intensity: 1.95; type: point; color: #f7ebca" position="122.74587 2.20497 -110.11837"></a-entity>
+        <!--Living-->
+        <a-entity light="decay: 0.87; distance: 5.85; intensity: 1.95; type: point; color: #f7ebca" position="118.77823 2.80748 -110.09536"></a-entity>
+        <!--Kitchen-->
+        <a-entity light="decay: 0.87; distance: 5.85; intensity: 1.95; type: point; color: #f7ebca" position="122.66949 2.7759 -106.07067"></a-entity>
+        <!--Hall-->
+        <a-entity light="decay: 0.87; distance: 5.85; intensity: 1.95; type: point; color: #f7ebca" position="129.87001  2.80748 -108.5466"></a-entity>
+        <!--Hall 2-->
+        <a-entity light="decay: 0.87; distance: 5.85; intensity: 1.95; type: point; color: #f7ebca" position="125.0274  2.80748 -108.5466"></a-entity>
+        <!--Bedroom-->
+        <a-entity light="decay: 0.87; distance: 5.85; intensity: 1.95; type: point; color: #f7ebca" position="128.75993  2.80748 -110.95958"></a-entity>
+         <!--Bathroom-->
+        <a-entity light="decay: 0.87; distance: 5.85; intensity: 1.95; type: point; color: #f7ebca" position="128.9413 2.96617 -106.47907"></a-entity>
  
-         <!-- Arch left -->
+        <!-- Arch left -->
         <a-text size="3"  position="-5 5 -7.5" value="Stone Age"></a-text>
         <a-entity  teleport="-202.249  .1 -85.288" rotation="0 90 0" scale=" 1 1 1" position="-5 0 -9" gltf-model="#arch" event-set__mouseenter="_event: mouseenter; scale: 1.1 1.1 1.2;" event-set__mouseeleave="_event: mouseleave;  scale: 1 1 1;"></a-entity>
-          <!-- Arch mid -->
+        <!-- Arch mid -->
         <a-text size="3"  position="-.8 5 -7.5" value="18-19th Street"></a-text>
         <a-entity   teleport="-9.415 .1 -108.370" rotation="0 90 0" scale=" 1 1 1" position="0 0 -9" gltf-model="#arch" event-set__mouseenter="_event: mouseenter; scale: 1.1 1.1 1.2;" event-set__mouseeleave="_event: mouseleave;  scale: 1 1 1;"></a-entity>
-         <!-- Arch right -->
+        <!-- Arch right -->
         <a-text size="3"  position="3.4 5 -7.5" value="80-90s Apartment"></a-text>
         <a-entity  teleport="118.414 .1 -105.557" rotation="0 90 0" scale=" 1 1 1" position="5 0 -9" gltf-model="#arch" event-set__mouseenter="_event: mouseenter; scale: 1.1 1.1 1.2;" event-set__mouseeleave="_event: mouseleave;  scale: 1 1 1;"></a-entity>
+        
+        
+        
         
         
         <!-- teleporter  -->
@@ -208,6 +275,20 @@ AFRAME.registerComponent("teleport", {
         
         <!-- entrance/exit  -->
      <a-circle position="-9.556 .3 -108.480" rotation="-90 0 0" teleport="0 .1 -3.22" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+          <!-- Carrage  -->
+     <a-circle position="-7.839 .3 -86.284" rotation="-90 0 0" teleport="-7.839 .3 -86.284" radius=".25" opacity=".5"
+     color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
+     event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
+     event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
+    </a-circle> 
+        
+         <!-- Street  -->
+     <a-circle position="0.788 0.100 -91.695" rotation="-90 0 0" teleport="0.788 0.100 -91.695" radius=".25" opacity=".5"
      color="#c33" animation="property: radius; to: .5; dur: 1000; easing:easeOutQuad; loop: true"
      event-set__mouseenter="_event: mouseenter; material.color: #c00; opacity: .75;"
      event-set__mouseeleave="_event: mouseleave; material.color: #c33; opacity: .5;">
